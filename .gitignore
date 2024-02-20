@@ -1,0 +1,14 @@
+extension/firefox.xpi
+extension/firefox/manifest.json
+extension/firefox/options.html
+extension/firefox/popup.html
+extension/firefox/assets/icons/favicon-16.png
+extension/firefox/assets/icons/favicon-32.png
+extension/firefox/assets/icons/favicon-48.png
+extension/firefox/assets/icons/favicon-128.png
+extension/firefox/css/options.css
+extension/firefox/css/popup.css
+extension/firefox/js/background.bundle.js
+extension/firefox/js/contentScript.bundle.js
+extension/firefox/js/options.bundle.js
+extension/firefox/js/popup.bundle.js

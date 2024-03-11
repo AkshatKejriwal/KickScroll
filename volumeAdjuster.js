@@ -58,19 +58,6 @@ waitForElement(".vjs-tech", function (videoElement) {
   let intervalId;
 
   videoElement.addEventListener("wheel", function (event) {
-    volumePercentHolder.style.opacity = 1;
-    // Clear any existing interval before setting a new one
-    clearInterval(intervalId);
-
-    volPercent = Math.round(videoElement.volume * 100);
-    volumePercentHolder.textContent = `${volPercent}%`;
-    videoHolder.appendChild(volumePercentHolder);
-
-    // Set a new interval
-    intervalId = setInterval(() => {
-      volumePercentHolder.style.opacity = 0;
-    }, 1000);
-
     isScrolling = true;
     wasScrolling = true;
 
@@ -104,6 +91,18 @@ waitForElement(".vjs-tech", function (videoElement) {
           videoElement.muted = true;
         }
       }
+      volumePercentHolder.style.opacity = 1;
+      // Clear any existing interval before setting a new one
+      clearInterval(intervalId);
+
+      volPercent = Math.round(videoElement.volume * 100);
+      volumePercentHolder.textContent = `${volPercent}%`;
+
+      // Set a new interval
+      intervalId = setInterval(() => {
+        volumePercentHolder.style.opacity = 0;
+      }, 1000);
+      videoHolder.appendChild(volumePercentHolder);
     }
   });
 

@@ -10,38 +10,8 @@ function waitForElement(selector, callback) {
 
 const volumePercentHolder = document.createElement("div");
 
-function setVolumeSliderPosition(videoElement) {
-  const volumeSlider = document.querySelector('[aria-label="Volume"]');
-  const volumeTrack = document.querySelector(
-    '[data-orientation="horizontal"].bg-white'
-  );
-  console.log("volumeSlider", volumeSlider);
-  if (volumeSlider && volumeTrack) {
-    const currentVolume = videoElement.volume;
-    const volumePercentage = currentVolume * 100;
-    volumeSlider.parentNode.style.left = `${volumePercentage}%`;
-
-    volumeSlider.setAttribute("aria-valuenow", volumePercentage);
-
-    // Update the track to reflect the volume level visually
-    volumeTrack.style.right = `${100 - volumePercentage}%`;
-
-    console.log(`Volume slider set to ${volumePercentage}%`);
-  }
-}
-
-function showVolumeSlider() {
-  const volumeContainer = document.querySelector(
-    ".betterhover\\:group-hover\\/volume\\:flex"
-  );
-  if (volumeContainer) {
-    volumeContainer.style.display = "flex";
-  }
-}
-
 waitForElement("#video-player", function (videoElement) {
   const videoHolder = document.getElementById("injected-channel-player");
-  console.log("videoHolder", videoHolder);
   let isRightMouseDown = false;
   let isScrolling = false;
   let wasScrolling = false;
@@ -113,41 +83,10 @@ waitForElement("#video-player", function (videoElement) {
         volumePercentHolder.style.opacity = 0;
       }, 1000);
       videoHolder.appendChild(volumePercentHolder);
-
-      // Update the volume slider position
-      setVolumeSliderPosition(videoElement);
-      showVolumeSlider();
     }
   });
 
   videoElement.addEventListener("mouseup", function () {
     isScrolling = false; // Reset the scrolling flag on mouse up
   });
-
-  // Set up a MutationObserver to watch for the controls becoming visible
-  const observer = new MutationObserver((mutations) => {
-    for (const mutation of mutations) {
-      if (mutation.type === "childList" || mutation.type === "attributes") {
-        const controls = document.querySelector(".z-controls.bottom-0");
-        if (controls && window.getComputedStyle(controls).display !== "none") {
-          showVolumeSlider();
-          setVolumeSliderPosition(videoElement);
-          break;
-        }
-      }
-    }
-  });
-
-  // Start observing the document body for changes
-  observer.observe(document.body, {
-    childList: true,
-    subtree: true,
-    attributes: true,
-    attributeFilter: ["style", "class"],
-  });
-
-  // Also set the volume slider position periodically
-  setInterval(() => setVolumeSliderPosition(videoElement), 1000);
 });
-
-console.log("Combined volume control script is running");

@@ -53,7 +53,8 @@ waitForElement("#video-player", function (videoElement) {
   volumePercentHolder.style.transition = "opacity 0.5s ease-in-out";
   volumePercentHolder.style.pointerEvents = "none";
   volumePercentHolder.style.fontSize = "1rem";
-  volumePercentHolder.style.fontFamily = "__Inter_36bd41";
+  volumePercentHolder.style.fontFamily = "__Inter_d65c78, Helvetica";
+  volumePercentHolder.style.fontWeight = "600";
   volumePercentHolder.style.fontSmooth = "always";
 
   videoElement.addEventListener("mousedown", function (event) {

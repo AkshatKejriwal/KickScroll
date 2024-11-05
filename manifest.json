@@ -1,14 +1,14 @@
 {
   "manifest_version": 3,
-  "name": "Volume adjuster for kick.com",
-  "version": "2.0.5",
-  "description": "Adds ability to adjust volume while holding right click.",
+  "name": "KickScroll - Control Volume on Kick.com",
+  "version": "2.0.6",
+  "description": "Adds ability to adjust volume while holding right click and scrolling.",
   "icons": {
     "48": "icons/kick_icon.png"
   },
   "content_scripts": [
     {
-      "matches": ["*://*.kick.com/*"],
+      "matches": ["*://kick.com/*"],
       "js": ["volumeAdjuster.js"]
     }
   ],

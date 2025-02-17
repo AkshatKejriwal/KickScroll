@@ -21,7 +21,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Set checkbox based on stored showPercentage setting
     document.getElementById("showPercentage").checked = settings.showPercentage;
 
-    // Add save button click handler
     document
       .getElementById("saveSettings")
       .addEventListener("click", saveSettings);
@@ -46,7 +45,6 @@ function showFeedback(message, isError = false) {
   }, 2000);
 }
 
-// Save settings
 async function saveSettings() {
   try {
     const saveButton = document.getElementById("saveSettings");
@@ -57,7 +55,6 @@ async function saveSettings() {
     ).value;
     const showPercentage = document.getElementById("showPercentage").checked;
 
-    // Save to chrome.storage.sync
     await chrome.storage.sync.set({
       mouseButton,
       showPercentage,

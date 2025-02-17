@@ -1,0 +1,120 @@
+body {
+  width: 320px;
+  padding: 24px;
+  font-family: system-ui, -apple-system, sans-serif;
+  background-color: #f9fafb;
+  color: #1f2937;
+  margin: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #111827;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.option-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.option-label {
+  font-size: 15px;
+  font-weight: 600;
+  color: #374151;
+}
+
+/* Radio Buttons */
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.radio-option:hover {
+  background-color: #f3f4f6;
+}
+
+.radio-option input[type="radio"] {
+  margin: 0;
+  accent-color: #3b82f6;
+  width: 16px;
+  height: 16px;
+}
+
+.radio-option label {
+  font-size: 14px;
+  color: #4b5563;
+}
+
+.checkbox-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.checkbox-option:hover {
+  background-color: #f3f4f6;
+}
+
+.checkbox-option input[type="checkbox"] {
+  margin: 0;
+  accent-color: #3b82f6;
+  width: 16px;
+  height: 16px;
+}
+
+.checkbox-option label {
+  font-size: 14px;
+  color: #4b5563;
+}
+
+/* Save Button */
+.save-button {
+  width: 100%;
+  background-color: #3b82f6;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  margin-top: 8px;
+}
+
+.save-button:hover {
+  background-color: #2563eb;
+}
+
+.save-button:active {
+  background-color: #1d4ed8;
+  transform: translateY(0);
+}

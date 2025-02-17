@@ -1,16 +1,23 @@
 {
   "manifest_version": 3,
   "name": "KickScroll - Control Volume on Kick.com",
-  "version": "2.0.6",
-  "description": "Adds ability to adjust volume while holding right click and scrolling.",
+  "version": "2.1.0",
+  "description": "Customize volume control on Kick.com with configurable mouse buttons and scroll settings.",
   "icons": {
     "48": "icons/kick_icon.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "48": "icons/kick_icon.png"
+    }
   },
   "content_scripts": [
     {
       "matches": ["*://kick.com/*"],
+      "css": ["styles.css"],
       "js": ["volumeAdjuster.js"]
     }
   ],
-  "permissions": []
+  "permissions": ["storage", "tabs"]
 }

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>KickScroll Settings</title>
+    <style>
+        body {
+            width: 300px;
+            padding: 16px;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .option-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+        }
+
+        .option-label {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .radio-option input[type="radio"] {
+            margin: 0;
+        }
+
+        .radio-option label {
+            font-size: 14px;
+        }
+
+        .checkbox-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checkbox-option input[type="checkbox"] {
+            margin: 0;
+        }
+
+        .save-button {
+            background-color: #2563eb;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+
+        .save-button:hover {
+            background-color: #1d4ed8;
+        }
+
+        .range-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 4px;
+        }
+
+        .range-input {
+            flex: 1;
+        }
+
+        .range-input::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            background: #e5e7eb;
+            border-radius: 5px;
+        }
+
+        .range-input::-webkit-slider-thumb {
+            width: 16px;
+            height: 16px;
+            background: #2563eb;
+            border-radius: 50%;
+            border: none;
+            margin-top: -6px;
+            cursor: pointer;
+        }
+
+        .range-input::-moz-range-track {
+            width: 100%;
+            height: 4px;
+            background: #e5e7eb;
+            border-radius: 5px;
+        }
+
+        .range-input::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: #2563eb;
+            border-radius: 50%;
+            border: none;
+            margin-top: -6px;
+            cursor: pointer;
+        }
+
+        .range-input::-ms-track {
+            width: 100%;
+            height: 4px;
+            background: transparent;
+            border-color: transparent;
+            border-width: 8px 0;
+            color: transparent;
+        }
+
+        .range-input::-ms-fill-lower {
+            background: #e5e7eb;
+            border-radius: 10px;
+        }
+
+        .range-input::-ms-fill-upper {
+            background: #e5e7eb;
+            border-radius: 10px;
+        }
+
+        .range-input::-ms-thumb {
+            width: 16px;
+            height: 16px;
+            background: #2563eb;
+            border-radius: 10px;
+            border: none;
+            margin-top: 0px;
+            cursor: pointer;
+        }
+
+        .range-input:focus::-ms-fill-lower {
+            background: #e5e7eb;
+        }
+
+        .range-input:focus::-ms-fill-upper {
+            background: #e5e7eb;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="title">Volume Control Settings</h1>
+
+        <div class="option-group">
+            <div class="option-label">Mouse Button to Hold</div>
+            <div class="radio-group">
+                <div class="radio-option">
+                    <input type="radio" id="rightClick" name="mouseButton" value="right">
+                    <label for="rightClick">Right Click</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" id="leftClick" name="mouseButton" value="left">
+                    <label for="leftClick">Left Click</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" id="middleClick" name="mouseButton" value="middle">
+                    <label for="middleClick">Middle Click</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" id="none" name="mouseButton" value="none">
+                    <label for="none">No Button (Scroll Only)</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="option-group">
+            <div class="checkbox-option">
+                <input type="checkbox" id="showPercentage" name="showPercentage">
+                <label for="showPercentage">Show Volume Percentage</label>
+            </div>
+        </div>
+
+
+        <button class="save-button" id="saveSettings">Save Settings</button>
+    </div>
+    <script src="popup.js"></script>
+</body>
+
+</html>

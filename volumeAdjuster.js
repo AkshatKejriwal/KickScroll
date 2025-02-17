@@ -9,6 +9,37 @@ function waitForElement(selector, callback) {
 }
 
 const volumePercentHolder = document.createElement("div");
+volumePercentHolder.className = "volume-percentage";
+
+const messageHolder = document.createElement("div");
+messageHolder.className = "message";
+messageHolder.textContent = "Click anywhere to control volume";
+
+const settingsMessageHolder = document.createElement("div");
+settingsMessageHolder.className = "settings-message";
+settingsMessageHolder.innerHTML = `
+  <div class="settings-message-header">
+    <h1>KickScroll</h1>
+    <button class="settings-message-close">×</button>
+  </div>
+  <div class="settings-message-content">
+    <p>New Feature: You can now customize volume control settings!</p>
+    <p class="settings-message-action">Click the extension icon to access settings</p>
+  </div>
+`;
+
+// Update the click handler to target the close button within the message
+settingsMessageHolder
+  .querySelector(".settings-message-close")
+  .addEventListener("click", () => {
+    settingsMessageHolder.style.opacity = "0";
+    setTimeout(() => {
+      if (settingsMessageHolder.parentNode) {
+        settingsMessageHolder.parentNode.removeChild(settingsMessageHolder);
+      }
+    }, 500);
+    chrome.storage.local.set({ hasShownSettingsMessage: true });
+  });
 
 function setVolumeSliderPosition(videoElement) {
   const volumeSlider = document.querySelector('[aria-label="Volume"]');
@@ -24,6 +55,7 @@ function setVolumeSliderPosition(videoElement) {
     volumeTrack.style.right = `${100 - volumePercentage}%`;
   }
 }
+
 function showVolumeSlider() {
   const volumeContainer = document.querySelector(
     ".betterhover\\:group-hover\\/volume\\:flex"
@@ -32,89 +64,119 @@ function showVolumeSlider() {
     volumeContainer.style.display = "flex";
   }
 }
-waitForElement("#video-player", function (videoElement) {
+
+let settings = {
+  mouseButton: "right",
+  showPercentage: true,
+};
+
+// Function to initialize volume control for a video element
+function initializeVolumeControl(videoElement) {
   const videoHolder = document.getElementById("injected-channel-player");
-  let isRightMouseDown = false;
+  if (!videoHolder) return; // Exit if video holder not found
+
+  let isButtonDown = false;
   let isScrolling = false;
   let wasScrolling = false;
   let volPercent;
+  let intervalId;
+  let hasInteracted = false; // Add this flag to track interaction
 
-  volumePercentHolder.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
-  volumePercentHolder.style.color = "white";
-  volumePercentHolder.style.borderRadius = "12px";
-  volumePercentHolder.style.height = "50px";
-  volumePercentHolder.style.width = "80px";
-  volumePercentHolder.style.lineHeight = "50px";
-  volumePercentHolder.style.textAlign = "center";
-  volumePercentHolder.style.position = "absolute";
-  volumePercentHolder.style.top = "50%";
-  volumePercentHolder.style.left = "50%";
-  volumePercentHolder.style.transform = "translate(-50%, -50%)";
-  volumePercentHolder.style.transition = "opacity 0.5s ease-in-out";
-  volumePercentHolder.style.pointerEvents = "none";
-  volumePercentHolder.style.fontSize = "1rem";
-  volumePercentHolder.style.fontFamily = "__Inter_d65c78, Helvetica";
-  volumePercentHolder.style.fontWeight = "600";
-  volumePercentHolder.style.fontSmooth = "always";
+  // Add interaction listener to document
+  document.addEventListener(
+    "click",
+    function () {
+      hasInteracted = true;
+    },
+    { once: true }
+  );
+
+  function isTargetButtonPressed(event) {
+    if (settings.mouseButton === "none") return true;
+    if (settings.mouseButton === "right") return event.button === 2;
+    if (settings.mouseButton === "left") return event.button === 0;
+    if (settings.mouseButton === "middle") return event.button === 1;
+    return false;
+  }
 
   videoElement.addEventListener("mousedown", function (event) {
     wasScrolling = false;
-    if (event.button == 2) {
-      isRightMouseDown = true;
+    if (isTargetButtonPressed(event)) {
+      isButtonDown = true;
     }
   });
 
   videoElement.addEventListener("contextmenu", function (event) {
-    if (wasScrolling) {
+    if (wasScrolling && settings.mouseButton === "right") {
       event.preventDefault();
     }
   });
 
   videoElement.addEventListener("mouseup", function (event) {
-    if (event.button == 2) {
-      isRightMouseDown = false;
+    if (isTargetButtonPressed(event)) {
+      isButtonDown = false;
     }
   });
 
-  let intervalId;
   videoElement.addEventListener("wheel", function (event) {
     isScrolling = true;
     wasScrolling = true;
-    if (isRightMouseDown) {
+    if (settings.mouseButton === "none" || isButtonDown) {
       event.preventDefault();
-      // Adjust the volume based on the scroll direction
+
+      // Only show message if user hasn't interacted and video is muted
+      if (
+        settings.mouseButton === "none" &&
+        videoElement.muted &&
+        !hasInteracted
+      ) {
+        messageHolder.style.opacity = "1";
+        if (!messageHolder.parentNode) {
+          videoHolder.appendChild(messageHolder);
+        }
+        setTimeout(() => {
+          messageHolder.style.opacity = "0";
+        }, 2000);
+        return;
+      }
+
+      // Hardcoded volume step to 5%
+      const volumeStep = 0.025;
+
+      // Adjust the volume based on the scroll direction using the correct step size
       if (event.deltaY < 0) {
         if (videoElement.muted) {
           videoElement.muted = false;
         }
-        // Increase volume, but ensure it doesn't go above 1
-        videoElement.volume = Math.min(1, videoElement.volume + 0.05);
+        videoElement.volume = Math.min(1, videoElement.volume + volumeStep);
       } else {
-        // Scroll down, decrease volume, but ensure it doesn't go below 0
-        videoElement.volume = Math.max(0, videoElement.volume - 0.05);
+        videoElement.volume = Math.max(0, videoElement.volume - volumeStep);
         if (videoElement.volume === 0) {
           videoElement.muted = true;
         }
       }
-      volumePercentHolder.style.opacity = 1;
-      // Clear any existing interval before setting a new one
-      clearInterval(intervalId);
-      volPercent = Math.round(videoElement.volume * 100);
-      volumePercentHolder.textContent = `${volPercent}%`;
-      // Set a new interval
-      intervalId = setInterval(() => {
-        volumePercentHolder.style.opacity = 0;
-      }, 1000);
-      videoHolder.appendChild(volumePercentHolder);
+
+      if (settings.showPercentage) {
+        volumePercentHolder.style.opacity = "1";
+        // Clear any existing interval before setting a new one
+        clearInterval(intervalId);
+        volPercent = Math.round(videoElement.volume * 100);
+        volumePercentHolder.textContent = `${volPercent}%`;
+        // Set a new interval
+        intervalId = setInterval(() => {
+          volumePercentHolder.style.opacity = "0";
+        }, 1000);
+        if (!volumePercentHolder.parentNode) {
+          videoHolder.appendChild(volumePercentHolder);
+        }
+      }
+
       // Update the volume slider position
       setVolumeSliderPosition(videoElement);
       showVolumeSlider();
     }
   });
 
-  videoElement.addEventListener("mouseup", function () {
-    isScrolling = false; // Reset the scrolling flag on mouse up
-  });
   // Set up a MutationObserver to watch for the controls becoming visible
   const observer = new MutationObserver((mutations) => {
     for (const mutation of mutations) {
@@ -128,6 +190,7 @@ waitForElement("#video-player", function (videoElement) {
       }
     }
   });
+
   // Start observing the document body for changes
   observer.observe(document.body, {
     childList: true,
@@ -135,6 +198,53 @@ waitForElement("#video-player", function (videoElement) {
     attributes: true,
     attributeFilter: ["style", "class"],
   });
+
   // Also set the volume slider position periodically
   setInterval(() => setVolumeSliderPosition(videoElement), 1000);
+}
+
+// Split the storage gets - settings in sync, message state in local
+chrome.storage.sync.get(
+  {
+    mouseButton: "right",
+    showPercentage: true,
+  },
+  (loadedSettings) => {
+    settings = loadedSettings;
+    const videoElement = document.querySelector("#video-player");
+    if (videoElement) {
+      initializeVolumeControl(videoElement);
+
+      // Check message state in local storage
+      chrome.storage.local.get(
+        { hasShownSettingsMessage: false },
+        (messageState) => {
+          if (!messageState.hasShownSettingsMessage) {
+            const videoHolder = document.getElementById(
+              "injected-channel-player"
+            );
+            if (videoHolder) {
+              videoHolder.appendChild(settingsMessageHolder);
+              settingsMessageHolder.style.opacity = "1";
+            }
+          }
+        }
+      );
+    }
+  }
+);
+
+// Listen for settings changes
+chrome.runtime.onMessage.addListener((message) => {
+  if (message.type === "SETTINGS_UPDATED") {
+    settings = message.settings;
+    // Re-initialize for any existing video player
+    const videoElement = document.querySelector("#video-player");
+    if (videoElement) {
+      initializeVolumeControl(videoElement);
+    }
+  }
 });
+
+// Watch for video player being added to the page
+waitForElement("#video-player", initializeVolumeControl);

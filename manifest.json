@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "KickScroll - Control Volume on Kick.com",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Customize volume control on Kick.com with configurable mouse buttons and scroll settings.",
   "icons": {
     "48": "icons/kick_icon.png"

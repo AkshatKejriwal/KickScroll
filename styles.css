@@ -13,7 +13,7 @@
   transition: opacity 0.5s ease-in-out;
   pointer-events: none;
   font-size: 1rem;
-  font-family: "__Inter_d65c78", "Helvetica", sans-serif;
+  font-family: "Inter", "Helvetica", sans-serif;
   font-weight: 600;
   font-smooth: always;
   opacity: 0;
@@ -32,7 +32,7 @@
   transition: opacity 0.5s ease-in-out;
   pointer-events: none;
   font-size: 1rem;
-  font-family: "__Inter_d65c78", "Helvetica", sans-serif;
+  font-family: "Inter", "Helvetica", sans-serif;
   font-weight: 600;
   opacity: 0;
 }
@@ -61,7 +61,7 @@
   border-radius: 8px;
   padding: 16px;
   color: white;
-  font-family: "__Inter_d65c78", "Helvetica", sans-serif;
+  font-family: "Inter", "Helvetica", sans-serif;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 9999;
   max-width: 320px;
